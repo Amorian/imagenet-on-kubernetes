@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imagenet-deployment
+  labels:
+    app: imagenet-inference
+  annotations:
+    deployment.kubernetes.io/revision:  "1"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: imagenet-inference
+  strategy:
+     rollingUpdate:
+       maxSurge: 1
+       maxUnavailable: 1
+     type:  RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: imagenet-inference
+    spec:
+      containers:
+      - name: imagenet-inference
+        image: imagenet-inference
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Never
